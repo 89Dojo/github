@@ -5,7 +5,6 @@ resource "github_branch_protection" "github_master" {
   required_pull_request_reviews {
     dismiss_stale_reviews = false
   }
-
-  branch = "master"
-  repository = "github"
+  pattern = "main"
+  repository_id = github_repository.github.id
 }

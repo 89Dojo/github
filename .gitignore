@@ -30,3 +30,9 @@ override.tf.json
 
 # idea
 .idea
+
+# vars
+vars.tfvars
+
+# log
+terraform.log
