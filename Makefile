@@ -1,6 +1,6 @@
 CD = cd terraform/github
 VARS = vars.tfvars
-PROFILE = hackDojo
+PROFILE = hackDojoa
 
 validate:
 	@${CD} && \
