@@ -25,6 +25,8 @@ jobs:
         run: echo "${{ secrets.TFVARS }}" > terraform/github/vars.tfvars
       - name: Terraform Format
         run: make format
+      - name: Terraform init
+        run: make remote-enable
       - name: Terraform apply
         run: make apply
       - name: Save tfstate
