@@ -31,3 +31,8 @@ apply:
 	@${CD} && \
 		terraform apply -auto-approve \
 		-var-file=${VARS}
+
+format:
+	@${CD} $$ \
+		terraform fmt -recursive -check \
+		-var-file=${VARS}

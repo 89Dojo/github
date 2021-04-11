@@ -1,0 +1,38 @@
+name: main
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.12.25
+      - name: Create tfvars
+        run: echo "${{ secrets.TFVARS }}" > terraform/github/vars.tfvars
+      - name: Terraform Format
+        run: make format
+      - name: Terraform apply
+        run: make apply
+      - name: Save tfstate
+        run: |
+          git add -A
+          DIFF=`git diff --cached --numstat | wc -l`
+          if [ $DIFF -eq 0 ]; then
+            exit 0
+          fi
+          git commit -am 'GitHub Actions commit' --allow-empty
+          git push origin main
