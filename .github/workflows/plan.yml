@@ -1,0 +1,42 @@
+name: plan
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.12.29
+      - name: Create tfvars
+        run: echo "${{ secrets.TFVARS }}" > terraform/github/vars.tfvars
+      - name: Terraform Format
+        run: make format
+      - name: Terraform init
+        run: make remote-enable
+      - name: Terraform plan
+        run: make plan > plan.txt
+      - name: Cat plan.txt
+        run: |
+          cat plan.txt
+          sed -i -z 's/\n/\\n/g' plan.txt
+      - name: Post plan result
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: ${{ github.event.pull_request.comments_url }}
+        run: |
+          curl -X POST \
+               -H "Authorization: token ${GITHUB_TOKEN}" \
+               -d "{\"body\": \"$(cat plan.txt)\"}" \
+               ${URL}
