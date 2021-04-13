@@ -28,19 +28,31 @@ jobs:
       - name: Terraform plan
         run: make plan-ci
       - name: Cat plan.txt
+        id: plan
         run: |
           cat terraform/github/plan.txt
           sed -i -z 's/\n/\\n/g' terraform/github/plan.txt
           sed -i -z 's/\"/\\"/g' terraform/github/plan.txt
-          sed -i -z 's/Terraform exited with code(\s|\S)+//g' terraform/github/plan.txt
-      - name: Cat plan.txt 2
-        run: cat terraform/github/plan.txt
-      - name: Post plan result
+      - name: PR Comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.comments_url }}
-        run: |
-          curl -X POST \
-               -H "Authorization: token ${GITHUB_TOKEN}" \
-               -d "{\"body\": \"$(cat terraform/github/plan.txt)\"}" \
-               ${URL}
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          script: |
+            const output = `## \`${{ matrix.dir }}\`
+            #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`${process.env.PLAN}\`\`\`
+
+            </details>`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
