@@ -26,17 +26,29 @@ jobs:
       - name: Terraform init
         run: make remote-enable
       - name: Terraform plan
-        run: make plan > plan.txt
-      - name: Cat plan.txt
-        run: |
-          cat plan.txt
-          sed -i -z 's/\n/\\n/g' plan.txt
-      - name: Post plan result
+        id: plan
+        run: make plan-ci
+      - uses: actions/github-script@v1
+        if: ${{ !contains(steps.plan.outputs.stdout, 'No changes.') }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          URL: ${{ github.event.pull_request.comments_url }}
-        run: |
-          curl -X POST \
-               -H "Authorization: token ${GITHUB_TOKEN}" \
-               -d "{\"body\": \"$(cat plan.txt)\"}" \
-               ${URL}
+          STDOUT: "${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const lines = process.env.STDOUT.split('\n')
+            const separator = '-'.repeat(72)
+            let index = lines.indexOf(separator)
+            let outputLines = lines.slice(index + 1)
+            index = outputLines.indexOf(separator)
+            if (index) {
+              outputLines = outputLines.slice(0, index)
+            }
+            const planOutput = '```' + outputLines.join('\n') + '```'
+            const output = `<details><summary>terraform plan:</summary>\n\n${planOutput}\n\n</details>`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
