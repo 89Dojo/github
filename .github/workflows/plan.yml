@@ -32,6 +32,8 @@ jobs:
           cat plan.txt
           sed -i -z 's/\n/\\n/g' plan.txt
           sed -i -z 's/\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' plan.txt
+          sed -i -z 's/{/\\{/g' plan.txt
+          sed -i -z 's/}/\\}/g' plan.txt
       - name: Post plan result
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
