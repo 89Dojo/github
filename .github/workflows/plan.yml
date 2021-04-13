@@ -27,12 +27,6 @@ jobs:
         run: make remote-enable
       - name: Terraform plan
         run: make plan-ci
-      - name: Cat plan.txt
-        id: plan
-        run: |
-          cat terraform/github/plan.txt
-          sed -i -z 's/\n/\\n/g' terraform/github/plan.txt
-          sed -i -z 's/\"/\\"/g' terraform/github/plan.txt
       - name: PR Comment
         uses: actions/github-script@v3.0.0
         with:
