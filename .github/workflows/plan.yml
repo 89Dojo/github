@@ -32,6 +32,7 @@ jobs:
           cat terraform/github/plan.txt
           sed -i -z 's/\n/\\n/g' terraform/github/plan.txt
           sed -i -z 's/\"/\\"/g' terraform/github/plan.txt
+          sed -i -z 's/Terraform exited with code(\s|\S)+//g' terraform/github/plan.txt
       - name: Cat plan.txt 2
         run: cat terraform/github/plan.txt
       - name: Post plan result
