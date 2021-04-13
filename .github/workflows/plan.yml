@@ -29,11 +29,11 @@ jobs:
         run: make plan-ci
       - name: Cat plan.txt
         run: |
-          cat plan.txt
-          sed -i -z 's/\n/\\n/g' plan.txt
-          sed -i -z 's/\"/\\"/g' plan.txt
+          cat terraform/github/plan.txt
+          sed -i -z 's/\n/\\n/g' terraform/github/plan.txt
+          sed -i -z 's/\"/\\"/g' terraform/github/plan.txt
       - name: Cat plan.txt 2
-        run: cat plan.txt
+        run: cat terraform/github/plan.txt
       - name: Post plan result
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -41,5 +41,5 @@ jobs:
         run: |
           curl -X POST \
                -H "Authorization: token ${GITHUB_TOKEN}" \
-               -d "{\"body\": \"$(cat plan.txt)\"}" \
+               -d "{\"body\": \"$(cat terraform/github/plan.txt)\"}" \
                ${URL}
