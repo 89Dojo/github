@@ -27,6 +27,12 @@ plan:
 		terraform plan \
 		-var-file=${VARS}
 
+plan-ci:
+	@${CD} && \
+		terraform plan \
+		-no-color \
+		-var-file=${VARS}
+
 apply:
 	@${CD} && \
 		terraform apply -auto-approve \
