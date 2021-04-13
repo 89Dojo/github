@@ -26,24 +26,25 @@ jobs:
       - name: Terraform init
         run: make remote-enable
       - name: Terraform plan
+        id: plan
         run: make plan-ci
-      - name: PR Comment
-        uses: actions/github-script@v3.0.0
+      - uses: actions/github-script@v1
+        if: ${{ !contains(steps.plan.outputs.stdout, 'No changes.') }}
+        env:
+          STDOUT: "${{ steps.plan.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          URL: ${{ github.event.pull_request.comments_url }}
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
           script: |
-            const output = `## \`${{ matrix.dir }}\`
-            #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
-            <details><summary>Show Plan</summary>
-
-            \`\`\`${process.env.PLAN}\`\`\`
-
-            </details>`;
+            const lines = process.env.STDOUT.split('\n')
+            const separator = '-'.repeat(72)
+            let index = lines.indexOf(separator)
+            let outputLines = lines.slice(index + 1)
+            index = outputLines.indexOf(separator)
+            if (index) {
+              outputLines = outputLines.slice(0, index)
+            }
+            const planOutput = '```' + outputLines.join('\n') + '```'
+            const output = `<details><summary>tf plan:</summary>\n\n${planOutput}\n\n</details>`;
 
             github.issues.createComment({
               issue_number: context.issue.number,
