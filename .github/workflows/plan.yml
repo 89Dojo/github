@@ -31,9 +31,8 @@ jobs:
         run: |
           cat plan.txt
           sed -i -z 's/\n/\\n/g' plan.txt
-          sed -i -z 's/\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' plan.txt
-          sed -i -z 's/^\/home\/(\s|\S)*------------------------------------------------------------------------.+An execution plan has been generated and is shown below//g' plan.txt
           sed -i -z 's/"/\"/g' plan.txt
+          sed -i -z 's/(\s|\S)*An execution plan has been generated and is shown below//g' plan.txt
       - name: Cat plan.txt 2
         run: cat plan.txt
       - name: Post plan result
