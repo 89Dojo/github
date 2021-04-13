@@ -31,7 +31,7 @@ plan-ci:
 	@${CD} && \
 		terraform plan \
 		-no-color \
-		-var-file=${VARS}
+		-var-file=${VARS} > plan.txt
 
 apply:
 	@${CD} && \
