@@ -32,7 +32,7 @@ jobs:
           cat plan.txt
           sed -i -z 's/\n/\\n/g' plan.txt
           sed -i -z 's/\"/\\"/g' plan.txt
-          sed -i -z 's/::debug::Terraform exited(\s|\S)*/aaa/g' plan.txt
+          sed -i -z 's/::debug::Terraform exited(\s|\S)*/ /g' plan.txt
       - name: Cat plan.txt 2
         run: cat plan.txt
       - name: Post plan result
