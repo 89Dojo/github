@@ -44,7 +44,7 @@ jobs:
               outputLines = outputLines.slice(0, index)
             }
             const planOutput = '```' + outputLines.join('\n') + '```'
-            const output = `<details><summary>tf plan:</summary>\n\n${planOutput}\n\n</details>`;
+            const output = `<details><summary>terraform plan:</summary>\n\n${planOutput}\n\n</details>`;
 
             github.issues.createComment({
               issue_number: context.issue.number,
