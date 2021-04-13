@@ -42,5 +42,5 @@ jobs:
         run: |
           curl -X POST \
                -H "Authorization: token ${GITHUB_TOKEN}" \
-               -d "{\"body\": \"$(cat plan.txt)\"}" \
+               -d "{\"body\": \"```$(cat plan.txt)```\"}" \
                ${URL}
