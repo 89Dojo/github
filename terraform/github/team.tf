@@ -10,7 +10,7 @@ resource "github_team" "developer" {
   privacy = "closed"
 }
 
-resource "github_team" "readonly"
+resource "github_team" "readonly" {
   name        = "Readoly"
   description = "readonly"
   privacy = "closed"
