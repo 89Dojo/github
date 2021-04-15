@@ -1,6 +1,6 @@
 provider "github" {
   token        = var.github_token
-  organization = "89dojo"
+  owner = "89dojo"
 }
 
 terraform {
