@@ -13,5 +13,5 @@ resource "github_team" "developer" {
 resource "github_team" "readonly"
   name        = "Readoly"
   description = "readonly"
-  privacy     = "closed"
+  privacy = "closed"
 }
