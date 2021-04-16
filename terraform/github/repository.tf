@@ -19,7 +19,7 @@ resource "github_issue_label" "github_feature" {
   color      = "00FF00"
 }
 
-resource "github_repository" "89Dojo.github.io" {
+resource "github_repository" "89Dojo-github-io" {
   name        = "89Dojo.github.io"
   description = "89Dojo.github.io"
 
