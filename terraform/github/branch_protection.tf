@@ -9,11 +9,11 @@
 //  repository_id = github_repository.github.id
 //}
 
-resource "github_branch_protection_v3" "github_main" {
-  repository     = github_repository.github.name
-  branch         = "main"
+# resource "github_branch_protection_v3" "github_main" {
+#   repository     = github_repository.github.name
+#   branch         = "main"
 
-  restrictions {
-    users = ["tubone24"]
-  }
-}
+#   restrictions {
+#     users = ["tubone24", "GitHubActions"]
+#   }
+# }
