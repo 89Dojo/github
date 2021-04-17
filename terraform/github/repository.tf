@@ -18,3 +18,12 @@ resource "github_issue_label" "github_feature" {
   name       = "Feature"
   color      = "00FF00"
 }
+
+resource "github_repository" "_89Dojo_github_io" {
+  name        = "89Dojo.github.io"
+  description = "89Dojo.github.io"
+
+  has_issues    = true
+  has_wiki      = true
+  has_downloads = true
+}
