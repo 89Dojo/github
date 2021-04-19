@@ -26,4 +26,10 @@ resource "github_repository" "_89Dojo_github_io" {
   has_issues    = true
   has_wiki      = true
   has_downloads = true
+  
+  pages {
+    source {
+      branch = "gh-pages"
+    }
+  }
 }
