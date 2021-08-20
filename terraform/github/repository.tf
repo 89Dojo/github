@@ -33,3 +33,12 @@ resource "github_repository" "_89Dojo_github_io" {
     }
   }
 }
+
+resource "github_repository" "workplace_lunch_map" {
+  name        = "workplace_lunch_map"
+  description = "会社近くのランチマップ作ろうぜ"
+
+  has_issues    = true
+  has_wiki      = true
+  has_downloads = true
+}
